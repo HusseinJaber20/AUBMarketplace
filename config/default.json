@@ -1,3 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://HusseinJaber:Arsenal123@aubmarketplace.pxqjn.mongodb.net/AUBMarketplace?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://HusseinJaber:Arsenal123@aubmarketplace.pxqjn.mongodb.net/AUBMarketplace?retryWrites=true&w=majority",
+    "jwtSecret" : "CSEISTHEBESTMAJOR"
 }
