@@ -18,7 +18,6 @@ router.post('/', [
     check('name','Name is required').not().isEmpty(),
     check('email','Please include a valid email').isEmail(),
     check('password', 'Please enter a password with 6 or more characters').isLength({min:6}),
-    // TODO : check('password', 'Email is not an AUB mail').matches('/^[a-z0-9](\.?[a-z0-9]){5,}@mail.aub.edu$/')
 ],async (req,res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
@@ -26,6 +25,9 @@ router.post('/', [
     }
 
     const {name, email, password} = req.body;
+    if(!email.endsWith("mail.aub.edu")){
+        res.status(400).json({ errors : [{ msg : 'Email is not an aub mail'}]});
+    }
     
     try {
          // See if the user exists in the users document 
