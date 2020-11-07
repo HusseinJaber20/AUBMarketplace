@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router();
 const Product = require('../../models/Product')
-const jwt = require('jsonwebtoken')
-const config = require('config')
+const User = require('../../models/User')
 const auth = require('../../middleware/auth')
 const {check, validationResult} = require('express-validator/check')
+ObjectId = require('mongodb').ObjectID;
 
 // @route  Post api/posts
 // @desc   Post about a product
@@ -31,6 +31,9 @@ router.post('/', auth, [
             images,
         })
         await product.save();
+        await User.updateOne({ _id : req.user.id}, {
+            $push: { posts: ObjectId(product.id) }
+        })
         res.json({ msg : "Product saved successfully!"})
     } catch(err){
         console.error(err.message);
