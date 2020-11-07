@@ -25,8 +25,8 @@ const ProductSchema = new mongoose.Schema({
         required : false
     },
     seller : {
-        type : Number,
-        required : true,
+        type : mongoose.Schema.Types.ObjectId,
+        required : false
     },
     status : {
         type: String,
@@ -37,4 +37,4 @@ const ProductSchema = new mongoose.Schema({
 });
 
 // You can think of a model as a constructor. It will be used too to query from the DB.
-module.exports = User = mongoose.model('products', ProductSchema);
+module.exports = Product = mongoose.model('products', ProductSchema);
