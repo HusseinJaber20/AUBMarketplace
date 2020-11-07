@@ -10,7 +10,7 @@ ObjectId = require('mongodb').ObjectID;
 // @desc   Post about a product
 // @acess  Public
 
-router.post('/', auth, [
+router.post('/product', auth, [
     check('name','Name is empty').not().isEmpty(),
     check('description','Description is empty').not().isEmpty(),
     check('price','price is empty').not().isEmpty()
@@ -32,7 +32,7 @@ router.post('/', auth, [
         })
         await product.save();
         await User.updateOne({ _id : req.user.id}, {
-            $push: { posts: ObjectId(product.id) }
+            $push: { products: ObjectId(product.id) }
         })
         res.json({ msg : "Product saved successfully!"})
     } catch(err){

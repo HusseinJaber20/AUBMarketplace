@@ -24,7 +24,7 @@ router.post('/', [
         return res.status(400).json({ errors: errors.array() })
     }
 
-    const {name, email, password, posts} = req.body;
+    const {name, email, password, products} = req.body;
     if(!email.endsWith("mail.aub.edu")){
         res.status(400).json({ errors : [{ msg : 'Email is not an aub mail'}]});
     }
@@ -40,7 +40,7 @@ router.post('/', [
              name,
              email,
              password,
-             posts
+             products
          });
          // Encrypt the password
          const salt = await bcrypt.genSalt(10);
