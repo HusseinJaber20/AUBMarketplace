@@ -41,4 +41,19 @@ router.post('/product', auth, [
     }
 });
 
+router.get('/product/hottest', auth, async (req,res) => {
+    let data = await Product.find({}).sort({$natural: -1}).limit(5);
+    res.json({data})
+})
+
+router.get('/product/latest', auth, async (req,res) => {
+    let data = await Product.find({}).sort({$natural: -1}).limit(5);
+    res.json({data})
+})
+
+router.get('/product/recommended', auth, async (req,res) => {
+    let data = await Product.find({}).sort({$natural: -1}).limit(5);
+    res.json({data})
+})
+
 module.exports = router;
