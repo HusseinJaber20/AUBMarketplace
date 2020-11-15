@@ -7,9 +7,7 @@ const config = require('config')
 const auth = require('../../middleware/auth')
 const bcrypt = require('bcryptjs')
 
-// @route  GET api/auth
-// @desc   Test route
-// @acess  Public
+
 router.get('/', auth, async (req,res) => {
     try {
         const user = await User.findById(req.user.id).select('-password')
@@ -20,14 +18,10 @@ router.get('/', auth, async (req,res) => {
     }
 });
 
-// @route  POST api/auth
-// @desc   Authenticate a user and get token
-// @acess  Public
-
 router.post('/', [
     check('email','Please include a valid email').isEmail(),
     check('password', 'Password is required').exists(),
-],async (req,res) => {
+], async (req,res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         return res.status(400).json({ errors: errors.array() })
