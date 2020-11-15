@@ -6,11 +6,7 @@ const auth = require('../../middleware/auth')
 const {check, validationResult} = require('express-validator/check')
 ObjectId = require('mongodb').ObjectID;
 
-// @route  Post api/posts
-// @desc   Post about a product
-// @acess  Public
-
-router.post('/product', auth, [
+router.post('/', auth, [
     check('name','Name is empty').not().isEmpty(),
     check('description','Description is empty').not().isEmpty(),
     check('price','price is empty').not().isEmpty()
@@ -41,19 +37,36 @@ router.post('/product', auth, [
     }
 });
 
-router.get('/product/hottest', auth, async (req,res) => {
+router.get('/hottest', auth, async (req,res) => {
     let data = await Product.find({}).sort({$natural: -1}).limit(5);
     res.json({data})
 })
 
-router.get('/product/latest', auth, async (req,res) => {
+router.get('/latest', auth, async (req,res) => {
     let data = await Product.find({}).sort({$natural: -1}).limit(5);
     res.json({data})
 })
 
-router.get('/product/recommended', auth, async (req,res) => {
+router.get('/recommended', auth, async (req,res) => {
     let data = await Product.find({}).sort({$natural: -1}).limit(5);
     res.json({data})
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = router;
