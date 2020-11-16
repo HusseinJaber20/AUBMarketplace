@@ -22,8 +22,11 @@ app.use('/api/users' , require('./routes/api/users'));
 app.use('/api/auth' , require('./routes/api/auth'));
 app.use('/api/profiles' , require('./routes/api/profiles'));
 app.use('/api/products' , require('./routes/api/products'));
-app.use('/api/services', require('./routes/api/services'))
-
+app.use('/api/services', require('./routes/api/services'));
+app.use('/api/recommend/products', require('./routes/api/RecommenderSystem/products'));
+app.use('/api/recommend/services', require('./routes/api/RecommenderSystem/services'));
+app.use('/api/search/products', require('./routes/api/SearchEngine/products'));
+app.use('/api/search/services', require('./routes/api/SearchEngine/services'));
 
 const PORT = process.env.PORT || 5000;
 

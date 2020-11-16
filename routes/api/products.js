@@ -6,6 +6,8 @@ const auth = require('../../middleware/auth')
 const {check, validationResult} = require('express-validator/check')
 ObjectId = require('mongodb').ObjectID;
 
+
+// Create a product
 router.post('/', auth, [
     check('name','Name is empty').not().isEmpty(),
     check('description','Description is empty').not().isEmpty(),
@@ -16,44 +18,40 @@ router.post('/', auth, [
         return res.status(400).json({ errors: errors.array() })
     }
     const {name, category, price, description, status, images} = req.body;
+    
+    product = new Product ({
+        ...req.body,
+        owner: req.user.id
+    })
+
     try{
-        product = new Product ({
-            name,
-            category,
-            price,
-            description,
-            seller : req.user.id,
-            status,
-            images,
-        })
         await product.save();
-        await User.updateOne({ _id : req.user.id}, {
-            $push: { products: ObjectId(product.id) }
-        })
-        res.json({ msg : "Product saved successfully!"})
+        res.status(201).send(product)        
     } catch(err){
         console.error(err.message);
         res.status(500).send('Server error')
     }
 });
 
-router.get('/hottest', auth, async (req,res) => {
-    let data = await Product.find({}).sort({$natural: -1}).limit(5);
-    res.json({data})
+
+// Read all products made by user
+router.get('/', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id)
+        await user.populate('products').execPopulate()
+        res.send(user.products)
+    } catch(e){
+        res.status(500).send()
+    }
 })
 
-router.get('/latest', auth, async (req,res) => {
-    let data = await Product.find({}).sort({$natural: -1}).limit(5);
-    res.json({data})
-})
+// Read single product made by user by id
 
-router.get('/recommended', auth, async (req,res) => {
-    let data = await Product.find({}).sort({$natural: -1}).limit(5);
-    res.json({data})
-})
+// Read single product made by OTHER user
 
+// Update product
 
-
+// Delete Product
 
 
 

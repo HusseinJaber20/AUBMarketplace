@@ -10,10 +10,11 @@ const bcrypt = require('bcryptjs')
 //        - express validator validates the req body
 //        - bycrpt is used to hash the password
 
-// @route  POST api/users
+// @route  api/users
 // @desc   Register a User
 // @acess  Public
 
+// Create a user
 router.post('/', [
     check('name','Name is required').not().isEmpty(),
     check('email','Please include a valid email').isEmail(),
@@ -30,11 +31,11 @@ router.post('/', [
     }
     
     try {
-         // See if the user exists in the users document 
-         let user = await User.findOne({email})
-         if(user){
-             res.status(400).json({ errors : [{ msg : 'User already exists'}]});
-         }
+        //  // See if the user exists in the users document 
+        //  let user = await User.findOne({email})
+        //  if(user){
+        //      res.status(400).json({ errors : [{ msg : 'User already exists'}]});
+        //  }
          // create a User
          user = new User({
              name,
@@ -69,5 +70,11 @@ router.post('/', [
         res.status(500).send('Server error')
     }
 });
+
+// Update User
+
+// Read/View user profile
+
+// Delete User
 
 module.exports = router;

@@ -1,7 +1,11 @@
 const express = require('express')
 const Service = require('../../models/Service')
+const User = require('../../models/User')
 const auth = require('../../middleware/auth')
 
+// @route  /api/services
+// @desc   Test route
+// @acess  Private
 
 const router = express.Router();
 
@@ -12,7 +16,7 @@ router.post('/', auth, async (req, res) => {
     // then hardcode the owner
     const service = new Service({
         ...req.body,
-        owner: req.user._id
+        owner: req.user.id
     })
 
     try{
@@ -27,19 +31,21 @@ router.post('/', auth, async (req, res) => {
 // Read all services made by user
 router.get('/', auth, async (req, res) => {
     try {
-        await req.user.populate('services').execPopulate()
-        res.send(req.user.services)
+        const user = await User.findById(req.user.id)
+        await user.populate('services').execPopulate()
+        res.send(user.services)
     } catch(e){
         res.status(500).send()
     }
 })
 
-// Read Service by ID
-router.get('/:id', async (req, res) => {
+// Read Service Made by User by ID
+router.get('/:id', auth, async (req, res) => {
     const _id = req.params.id
     
     try {
-        const service = await Service.findById(_id)
+        const service = await Service.findOne({_id, owner: req.user.id})
+
         if(!service){  
             return res.status(404).send()
         }
@@ -49,46 +55,11 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-/*
-// Update Service by ID
-router.patch('/:id', async (req, res) => {
-    const updates = Object.keys(req.body)
-    const allowedUpdates = ['description', 'status', 'category']
-    const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
+//Read Service made by OTHER user
 
-    if(!isValidOperation) {
-        return res.status(400).send({ error: 'Invalid updates!' })
-    }
-
-    try {
-        const service = await Service.findById(req.params.id)
-
-        updates.forEach((update) => service[update] = req.body[update])
-        await service.save()
-
-        if(!service){
-            return res.status(404).send()
-        }
-        res.send(service)
-    } catch(e) {
-        res.status(400).send(e)
-    }
-})
+// Update Service
 
 // Delete Service
-router.delete('/:id', async (req, res) => {
-    try {
-        const service = await Service.findByIdAndDelete(req.params.id)
-        if(!service){
-            res.status(404).send()
-        }
-        res.send(service)
-    } catch(e) {
-        res.status(500).send()
-    }
-})
-
-*/
 
 
 module.exports = router;

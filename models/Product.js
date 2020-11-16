@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
 
+const STATUS = ['Available' , 'Sold']
+const CATEGORY = ['Book', 'Notes', 'Supplies' , 'Electronics', 'Other']
+const CURRENCY = ['LBP', 'USD']
 
 const ProductSchema = new mongoose.Schema({
     name : {
@@ -8,8 +11,8 @@ const ProductSchema = new mongoose.Schema({
     },
     category : {
         type: String,
-        enum : ['book', 'notes', 'supplies' , 'electronics','other'],
-        default: 'other',
+        enum : CATEGORY,
+        default: 'Other',
         required: true
     },
     description : {
@@ -20,21 +23,28 @@ const ProductSchema = new mongoose.Schema({
         type : Number,
         required : true
     },
+    currency: {
+        type: String,
+        enum: CURRENCY,
+        default: 'LBP',
+        required: true
+    },
     images : {
         type : [],
         required : false
     },
-    seller : {
-        type : mongoose.Schema.Types.ObjectId,
-        required : false
-    },
     status : {
         type: String,
-        enum : ['available' , 'sold'],
-        default: 'available',
+        enum : STATUS,
+        default: 'Available',
         required: true
+    },
+    owner : {
+        type : mongoose.Schema.Types.ObjectId,
+        required : true,
+        ref: 'User'
     }
 });
 
 // You can think of a model as a constructor. It will be used too to query from the DB.
-module.exports = Product = mongoose.model('products', ProductSchema);
+module.exports = Product = mongoose.model('Product', ProductSchema);
