@@ -10,21 +10,45 @@ const mongoose = require('mongoose')
 const UserSchema = new mongoose.Schema({
     name : {
         type : String,
-        require : true
+        require : true,
+        trim: true
     },
     email : {
         type : String,
-        required : true
+        required : true,
+        unique: true,
+        trim: true,
+        lowercase: true
     },
     password: {
         type : String,
         required : true
     },
-    products : {
-        type : [],
-        required: false
-    }
+    tokens: [{ //used to log out user from all his sessions
+        token: {
+            type: String,
+            required: false //for now false, usually it should be true
+        }
+    }]
 });
 
+// a way for mongoose to figure the relationship between user and tasks
+// services will not stored in db
+UserSchema.virtual('services', {
+    ref: 'Service',
+
+    //where that local data is stored (ie relationship made by user._id)
+    localField: '_id',
+
+    //name of the field on the other object (ie Service)
+    foreignField: 'owner' 
+})
+
+UserSchema.virtual('products', {
+    ref: 'Product',
+    localField: '_id',
+    foreignField: 'owner' 
+})
+
 // You can think of a model as a constructor. It will be used too to query from the DB.
-module.exports = User = mongoose.model('users', UserSchema);
+module.exports = User = mongoose.model('User', UserSchema);

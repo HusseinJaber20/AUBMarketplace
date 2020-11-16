@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
 
+const CATEGORY = ['Teaching Assistant', 'Research Assistant', 'Group Project', 'Full Time Job', 'Part Time Job', 'Task', 'Other']
+const STATUS = ['Available' , 'Fulfilled']
+const CURRENCY = ['LBP', 'USD']
 
 const ServiceSchema = new mongoose.Schema({
     name : {
@@ -9,14 +12,14 @@ const ServiceSchema = new mongoose.Schema({
     },
     category : {
         type: String,
-        enum : ['Teaching Assistant', 'Research Assistant', 'Group Project', 'Full Time Job', 'Part Time Job', 'Task', 'Other'],
+        enum : CATEGORY,
         default: 'Other',
         required: true
     },
     status : {
         type: String,
-        enum : ['available' , 'fulfilled'],
-        default: 'available',
+        enum : STATUS,
+        default: 'Available',
         required: false
     },
     description : {
@@ -27,13 +30,15 @@ const ServiceSchema = new mongoose.Schema({
         type : Number,
         required : true
     },
+    currency: {
+        type: String,
+        enum: CURRENCY,
+        default: 'LBP',
+        required: true
+    },
     images : {
         type : [],
         required : false
-    },
-    applicants: {
-        type: [], //users
-        required: false
     },
     owner: {
         type : mongoose.Schema.Types.ObjectId,
