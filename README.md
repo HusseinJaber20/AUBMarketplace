@@ -9,7 +9,7 @@ Services include being a teaching or research assistant for a faculty member, tu
 ## Technologies
 This repository involves the application Backend.
 It consists of an Express application built with Node.js using Javascript and Mongoose.
-The database is a MongoDB databast
+The database is a MongoDB database
 
 The Frontend Repository can be found here
 https://github.com/OmarKhodr/AUBMarketplace-iOS
