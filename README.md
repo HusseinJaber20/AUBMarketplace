@@ -19,4 +19,4 @@ Maria Mattar, Hussein Jaber, Karim Zarzour, Mohammad Serhal, Omar Khodr
 - American University of Beirut (AUB) Students
 
 ## Course
-This project is for our university course EECE437 - Software Architecture and Design Fundamentals.
+This project is for our university course EECE437 - Software Architecture and Design Fundamentals given by Professor Fadi Zaraket.
