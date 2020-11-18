@@ -45,6 +45,8 @@ const ServiceSchema = new mongoose.Schema({
         required : true,
         ref: 'User'
     }
+},{
+    timestamps: true
 });
 
 // You can think of a model as a constructor. It will be used too to query from the DB.
