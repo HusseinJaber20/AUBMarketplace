@@ -5,6 +5,8 @@ const User = require('../../models/User')
 const jwt = require('jsonwebtoken')
 const config = require('config')
 const bcrypt = require('bcryptjs')
+const auth = require('../../middleware/auth')
+
 
 // Notes: - anything that returns a promise should have an await before or we can use .then() 
 //        - express validator validates the req body
@@ -25,23 +27,20 @@ router.post('/', [
         return res.status(400).json({ errors: errors.array() })
     }
 
-    const {name, email, password, products} = req.body;
+    const {name, email, password, products,number,location} = req.body;
     if(!email.endsWith("mail.aub.edu")){
         res.status(400).json({ errors : [{ msg : 'Email is not an aub mail'}]});
     }
     
     try {
-        //  // See if the user exists in the users document 
-        //  let user = await User.findOne({email})
-        //  if(user){
-        //      res.status(400).json({ errors : [{ msg : 'User already exists'}]});
-        //  }
          // create a User
          user = new User({
              name,
              email,
              password,
-             products
+             products,
+             number,
+             location
          });
          // Encrypt the password
          const salt = await bcrypt.genSalt(10);
@@ -52,6 +51,8 @@ router.post('/', [
                  id: user.id
              }
          }
+
+         await user.save();
 
          jwt.sign(
             payload,
@@ -64,17 +65,28 @@ router.post('/', [
                 res.json({token});
             }
          )
-         await user.save();
     } catch(err){
         console.error(err.message);
-        res.status(500).send('Server error')
+        res.status(500).send({'Message': err.message})
     }
 });
 
+// Delete a User  
+router.delete('/', auth, async (req,res) => {
+    try {
+        await User.deleteOne({ "_id" : req.user.id })
+        res.json({"message" : "Deleted User Successfully"});
+    } catch(err){
+        console.error(err.message);
+        res.status(500).send('Server Error')
+    }
+});
+
+
 // Update User
 
-// Read/View user profile
+// Read/View user profile (HJ: Found in Auth.js)
 
-// Delete User
+
 
 module.exports = router;

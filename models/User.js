@@ -24,12 +24,23 @@ const UserSchema = new mongoose.Schema({
         type : String,
         required : true
     },
+    number : {
+        type : Number,
+        required: true
+    },
+    location : {
+        type : String,
+        required : false
+    },
     tokens: [{ //used to log out user from all his sessions
         token: {
             type: String,
             required: false //for now false, usually it should be true
         }
     }]
+},
+{
+    timestamps: true
 });
 
 // a way for mongoose to figure the relationship between user and tasks
