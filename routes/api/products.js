@@ -51,7 +51,16 @@ router.get('/', auth, async (req, res) => {
 
 // Update product
 
-// Delete Product
+// Delete Product  
+router.delete('/:id', auth, async (req,res) => {
+    try {
+        await Product.deleteOne({ "_id" : req.params.id })
+        res.json({"message" : "Deleted Product Successfully"});
+    } catch(err){
+        console.error(err.message);
+        res.status(500).send('Server Error')
+    }
+});
 
 
 

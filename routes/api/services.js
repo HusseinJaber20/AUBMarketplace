@@ -55,11 +55,21 @@ router.get('/:id', auth, async (req, res) => {
     }
 })
 
-//Read Service made by OTHER user
+// Read Service made by OTHER user
 
 // Update Service
 
-// Delete Service
+
+// Delete Service  
+router.delete('/:id', auth, async (req,res) => {
+    try {
+        await Service.deleteOne({ "_id" : req.params.id })
+        res.json({"message" : "Deleted Service Successfully"});
+    } catch(err){
+        console.error(err.message);
+        res.status(500).send('Server Error')
+    }
+});
 
 
 module.exports = router;
