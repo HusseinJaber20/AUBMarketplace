@@ -23,7 +23,6 @@ module.exports = async(req,res,next) => {
         const decoded = jwt.verify(token, config.get('jwtSecret'))
         
         req.user = decoded.user;
-        //req.token = token;
         
         next();
     } catch(err){
