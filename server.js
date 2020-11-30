@@ -6,13 +6,9 @@ const app = express();
 connectDB();
 
 //Init Middleware
-//What is Middleware? It is those methods/functions/operations that are called BETWEEN 
-//processing the Request and sending the Response in your application method.
 
 //express.json() is a method inbuilt in express to recognize the incoming Request
 //Object as a JSON Object. This method is called as a middleware in your application using the code: app.use(express.json());
-
-
 app.use(express.json({extended : false}));
 
 app.get('/', (req,res) => res.send('API Running :)'));

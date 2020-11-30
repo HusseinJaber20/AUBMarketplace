@@ -43,8 +43,8 @@ const UserSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// a way for mongoose to figure the relationship between user and tasks
-// services will not stored in db
+// a way for mongoose to figure out the relationship between user and tasks
+// services will not be stored in db
 UserSchema.virtual('services', {
     ref: 'Service',
 
