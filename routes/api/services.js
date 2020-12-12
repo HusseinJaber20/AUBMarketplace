@@ -39,12 +39,12 @@ router.get('/', auth, async (req, res) => {
     }
 })
 
-// Read Service Made by User by ID
+// Read Service by ID
 router.get('/:id', auth, async (req, res) => {
     const _id = req.params.id
     
     try {
-        const service = await Service.findOne({_id, owner: req.user.id})
+        const service = await Service.findById(_id)
 
         if(!service){  
             return res.status(404).send()
@@ -55,15 +55,43 @@ router.get('/:id', auth, async (req, res) => {
     }
 })
 
-// Read Service made by OTHER user
 
-// Update Service
+// Update Service by ID
+router.patch('/:id', auth, async (req, res) => {
+    // updates passed by the user
+    const updates = Object.keys(req.body)
+    // updates allowed to be made
+    const allowedUpdates = ['description', 'name', 'category', 'status', 'salary', 'currency']
+    // isValidOperation will be false if one of the requested updates is not valid
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
+
+    if(!isValidOperation) {
+        return res.status(400).send({ error: 'Invalid updates!' })
+    }
+
+    try {
+        //A user can only update a service he created
+        const service = await Service.findOne({_id:req.params.id, owner: req.user.id})
+
+        if(!service){
+            return res.status(404).send()
+        }
+        
+        //updating the service and saving it to the database
+        updates.forEach((update) => service[update] = req.body[update])
+        await service.save()
+
+        res.send(service)
+    } catch(e) {
+        res.status(400).send(e)
+    }
+})
 
 
 // Delete Service  
 router.delete('/:id', auth, async (req,res) => {
     try {
-        await Service.deleteOne({ "_id" : req.params.id })
+        await Service.deleteOne({_id: req.params.id })
         res.json({"message" : "Deleted Service Successfully"});
     } catch(err){
         console.error(err.message);

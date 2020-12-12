@@ -32,7 +32,7 @@ router.post('/', [
 
     const {name, email, password, products,number,location} = req.body;
     if(!email.endsWith("mail.aub.edu")){
-        res.status(400).json({ errors : [{ msg : 'Email is not an aub mail'}]});
+        return res.status(400).json({ errors : [{ msg : 'Email is not an aub mail'}]});
     }
     
     try {

@@ -45,16 +45,15 @@ router.get('/', auth, async (req, res) => {
     }
 })
 
-// Read single product made by user by id
+// Read single product by id
 
-// Read single product made by OTHER user
 
 // Update product
 
 // Delete Product  
 router.delete('/:id', auth, async (req,res) => {
     try {
-        await Product.deleteOne({ "_id" : req.params.id })
+        await Product.deleteOne({ _id : req.params.id })
         res.json({"message" : "Deleted Product Successfully"});
     } catch(err){
         console.error(err.message);
