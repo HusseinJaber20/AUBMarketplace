@@ -20,7 +20,7 @@ module.exports = async(req,res,next) => {
         }
         
         // Verify the token , remember the token is a decrypted id     
-        const decoded = jwt.verify(token, config.get('jwtSecret'))
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
         
         req.user = decoded.user;
         

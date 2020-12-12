@@ -4,8 +4,8 @@ const {check, validationResult} = require('express-validator/check')
 const User = require('../../models/User')
 //Used for validating the User
 const jwt = require('jsonwebtoken')
-//Used to get jwtSecret
-const config = require('config')
+//sending emails
+const {sendWelcomeEmail, sendCancellationEmail} = require('../../emails/account')
 //Used to encrypt,dcrypyt the password
 const bcrypt = require('bcryptjs')
 const auth = require('../../middleware/auth')
@@ -56,10 +56,11 @@ router.post('/', [
          }
 
          await user.save();
+         sendWelcomeEmail(user.email, user.name)
 
          jwt.sign(
             payload,
-            config.get('jwtSecret'), 
+            process.env.JWT_SECRET, 
             {expiresIn: 36000},
             (err,token) => {
                 if(err){
@@ -77,7 +78,9 @@ router.post('/', [
 // Delete a User  
 router.delete('/', auth, async (req,res) => {
     try {
-        await User.deleteOne({ "_id" : req.user.id })
+        const user = await User.findById(req.user.id)
+        await user.remove()
+        sendCancellationEmail(user.email, user.name)
         res.json({"message" : "Deleted User Successfully"});
     } catch(err){
         console.error(err.message);

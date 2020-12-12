@@ -24,6 +24,6 @@ app.use('/api/recommend/services', require('./routes/api/RecommenderSystem/servi
 app.use('/api/search/products', require('./routes/api/SearchEngine/products'));
 app.use('/api/search/services', require('./routes/api/SearchEngine/services'));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => console.log('Server started :)'))

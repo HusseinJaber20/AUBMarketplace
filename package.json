@@ -5,11 +5,12 @@
   "main": "server.js",
   "scripts": {
     "start": "node server",
-    "server": "nodemon server"
+    "server": "env-cmd -f config/dev.env nodemon server"
   },
   "author": "Hussein Jaber",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^7.4.0",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.2",
     "express": "^4.17.1",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
+    "env-cmd": "^10.1.0",
     "nodemon": "^2.0.6"
   }
 }
