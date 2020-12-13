@@ -91,7 +91,11 @@ router.patch('/:id', auth, async (req, res) => {
 // Delete Service  
 router.delete('/:id', auth, async (req,res) => {
     try {
-        await Service.deleteOne({_id: req.params.id })
+        const service = await Service.findOneAndDelete({_id: req.params.id, owner: req.user.id})
+        if(!service){
+            return res.status(404).send()
+        }
+        
         res.json({"message" : "Deleted Service Successfully"});
     } catch(err){
         console.error(err.message);

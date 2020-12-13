@@ -53,7 +53,10 @@ router.get('/', auth, async (req, res) => {
 // Delete Product  
 router.delete('/:id', auth, async (req,res) => {
     try {
-        await Product.deleteOne({ _id : req.params.id })
+        const product = await Product.findOneAndDelete({_id: req.params.id, owner: req.user.id})
+        if(!product){
+            return res.status(404).send()
+        }
         res.json({"message" : "Deleted Product Successfully"});
     } catch(err){
         console.error(err.message);
