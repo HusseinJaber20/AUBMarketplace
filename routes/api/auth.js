@@ -17,6 +17,7 @@ router.get('/', auth, async (req,res) => {
     }
 });
 
+// Login by Username and Password
 router.post('/', [
     check('email','Please include a valid email').isEmail(),
     check('password', 'Password is required').exists(),
