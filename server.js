@@ -22,6 +22,8 @@ app.use('/api/recommend/products', require('./routes/api/RecommenderSystem/produ
 app.use('/api/recommend/services', require('./routes/api/RecommenderSystem/services'));
 app.use('/api/search/products', require('./routes/api/SearchEngine/products'));
 app.use('/api/search/services', require('./routes/api/SearchEngine/services'));
+app.use('/api/image/services' , require('./routes/api/ImageUploader/services'));
+app.use('/api/image/products' , require('./routes/api/ImageUploader/products'));
 
 const PORT = process.env.PORT;
 
