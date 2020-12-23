@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router();
 const {check, validationResult} = require('express-validator/check')
 const User = require('../../models/User')
+const Product = require('../../models/Product')
+const Service = require('../../models/Service')
 //Used for validating the User
 const jwt = require('jsonwebtoken')
 //sending emails
@@ -79,6 +81,17 @@ router.post('/', [
 router.delete('/', auth, async (req,res) => {
     try {
         const user = await User.findById(req.user.id)
+        await user.populate('products').execPopulate()
+        await user.populate('services').execPopulate()
+        // Delete all products offered by the user
+        user.products.forEach(async (product) => {
+            await Product.findOneAndDelete({_id: product._id, owner: req.user.id})
+        })
+        // Delete all services offered by the user
+        user.services.forEach(async (service) => {
+            await Service.findOneAndDelete({_id: service._id, owner: req.user.id})
+        })
+        // Delete user
         await user.remove()
         sendCancellationEmail(user.email, user.name)
         res.json({"message" : "Deleted User Successfully"});
