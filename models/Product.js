@@ -39,6 +39,11 @@ const ProductSchema = new mongoose.Schema({
         default: 'Available',
         required: true
     },
+    majors: {
+        type: [],
+        required: true,
+        index: true
+    },
     owner : {
         type : mongoose.Schema.Types.ObjectId,
         required : true,

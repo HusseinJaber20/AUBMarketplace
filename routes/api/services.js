@@ -2,6 +2,7 @@ const express = require('express')
 const Service = require('../../models/Service')
 const User = require('../../models/User')
 const auth = require('../../middleware/auth')
+const {check, validationResult} = require('express-validator/check')
 
 // @route  /api/services
 // @desc   Test route
@@ -11,7 +12,15 @@ const router = express.Router();
 
 
 // Create Service
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, [
+    check('name','Name is empty').not().isEmpty(),
+    check('description','Description is empty').not().isEmpty(),
+    check('salary','salary is empty').not().isEmpty()
+], async (req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({ errors: errors.array() })
+    }
     // copy all the properties of req.body to the object
     // then hardcode the owner
     const service = new Service({

@@ -26,13 +26,15 @@ router.post('/', [
     check('name','Name is required').not().isEmpty(),
     check('email','Please include a valid email').isEmail(),
     check('password', 'Please enter a password with 6 or more characters').isLength({min:6}),
+    check('number', 'Please enter a valid phone number').isInt(),
+    check('major', 'Please Enter a valid Major').not().isEmpty()
 ],async (req,res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         return res.status(400).json({ errors: errors.array() })
     }
 
-    const {name, email, password, products,number,location} = req.body;
+    const {name, email, password, products,number,location,major,interests} = req.body;
     if(!email.endsWith("mail.aub.edu")){
         return res.status(400).json({ errors : [{ msg : 'Email is not an aub mail'}]});
     }
@@ -45,7 +47,9 @@ router.post('/', [
              password,
              products,
              number,
-             location
+             location,
+             major,
+             interests
          });
          // Encrypt the password
          const salt = await bcrypt.genSalt(10);

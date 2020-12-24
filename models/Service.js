@@ -40,6 +40,10 @@ const ServiceSchema = new mongoose.Schema({
         type : [],
         required : false
     },
+    majors : {
+        type: [],
+        required : true
+    },
     owner: {
         type : mongoose.Schema.Types.ObjectId,
         required : true,

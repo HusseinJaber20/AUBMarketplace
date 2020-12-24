@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 // A collection in a NoSQL (MongoDB) is analogous to a table of an RDBMS
 // A document in a collection is analogous to a row in a table of an RDBMS
 
-// Link : https://mongoosejs.com/docs/guide.html
+const MAJOR = ['CCE' , 'CSE', 'ECE', 'ECON']
 
 const UserSchema = new mongoose.Schema({
     name : {
@@ -31,6 +31,15 @@ const UserSchema = new mongoose.Schema({
     location : {
         type : String,
         required : false
+    },
+    major : {
+        type : String,
+        enum : MAJOR,
+        required: true
+    },
+    interests : {
+        type : [],
+        required : true 
     },
     tokens: [{ //used to log out user from all his sessions
         token: {
