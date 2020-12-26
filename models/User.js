@@ -1,4 +1,7 @@
 const mongoose = require('mongoose')
+const Product = require('./Product')
+const Service = require('./Service')
+//const Transaction = require('./Transaction')
 
 // Each Schema in mongoose maps to a MongoDB collection and defines
 // the shape of the documents within that collection.
@@ -68,6 +71,18 @@ UserSchema.virtual('products', {
     ref: 'Product',
     localField: '_id',
     foreignField: 'owner' 
+})
+
+//MIDDLEWARES
+//delete all services/products/tasks related to a user before deleting it
+UserSchema.pre('remove', async function(next){
+    const user = this
+    await Service.deleteMany({owner: user._id})
+    await Product.deleteMany({owner: user._id})
+    // await Transaction.deleteMany({buyer: user._id})
+    // await Transaction.deleteMany({seller: user._id})
+
+    next()
 })
 
 // You can think of a model as a constructor. It will be used too to query from the DB.

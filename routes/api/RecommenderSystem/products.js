@@ -23,6 +23,4 @@ router.get('/latest', auth, async (req,res) => {
 })
 
 
-
-
 module.exports = router;
