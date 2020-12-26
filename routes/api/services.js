@@ -70,7 +70,7 @@ router.patch('/:id', auth, async (req, res) => {
     // updates passed by the user
     const updates = Object.keys(req.body)
     // updates allowed to be made
-    const allowedUpdates = ['description', 'name', 'category', 'status', 'salary', 'currency']
+    const allowedUpdates = ['description', 'name', 'category', 'status', 'salary', 'currency', 'images', 'majors']
     // isValidOperation will be false if one of the requested updates is not valid
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 

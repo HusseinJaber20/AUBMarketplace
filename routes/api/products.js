@@ -47,7 +47,36 @@ router.get('/', auth, async (req, res) => {
 // Read single product by id
 
 
-// Update product
+// Update product by ID
+router.patch('/:id', auth, async (req, res) => {
+    // updates passed by the user
+    const updates = Object.keys(req.body)
+    // updates allowed to be made
+    const allowedUpdates = ['description', 'name', 'category', 'status', 'price', 'currency', 'images', 'majors']
+    // isValidOperation will be false if one of the requested updates is not valid
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
+
+    if(!isValidOperation) {
+        return res.status(400).send({ error: 'Invalid updates!' })
+    }
+
+    try {
+        //A user can only update a product he created
+        const product = await Product.findOne({_id:req.params.id, owner: req.user.id})
+
+        if(!product){
+            return res.status(404).send()
+        }
+        
+        //updating the product and saving it to the database
+        updates.forEach((update) => product[update] = req.body[update])
+        await product.save()
+
+        res.send(product)
+    } catch(e) {
+        res.status(400).send(e)
+    }
+})
 
 // Delete Product  
 router.delete('/:id', auth, async (req,res) => {

@@ -96,6 +96,30 @@ router.delete('/', auth, async (req,res) => {
 
 
 // Update User
+router.patch('/', auth, async (req, res) => { 
+    const updates = Object.keys(req.body)
+    const allowedUpdates = ['name', 'email', 'password', 'number', 'location', 'major', 'interests']
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
+
+    if(!isValidOperation) {
+        return res.status(400).send({ error: 'Invalid updates!' })
+    }
+    try {
+        const user = await User.findById(req.user.id)
+
+        if(!user){
+            return res.status(404).send()
+        }
+
+        updates.forEach( (update) => user[update] = req.body[update]) //dynamic
+        await user.save()
+
+        res.send(user)
+    } catch(e) {
+        res.status(400).send(e)
+    }
+})
+
 
 // Read/View user profile (HJ: Found in Auth.js)
 
