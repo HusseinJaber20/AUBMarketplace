@@ -2,7 +2,7 @@ const express = require('express')
 const Service = require('../../models/Service')
 const User = require('../../models/User')
 const auth = require('../../middleware/auth')
-const {check, validationResult} = require('express-validator/check')
+const {check, validationResult} = require('express-validator')
 
 // @route  /api/services
 // @desc   Test route

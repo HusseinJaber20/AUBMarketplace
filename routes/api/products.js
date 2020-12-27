@@ -3,7 +3,7 @@ const router = express.Router();
 const Product = require('../../models/Product')
 const User = require('../../models/User')
 const auth = require('../../middleware/auth')
-const {check, validationResult} = require('express-validator/check')
+const {check, validationResult} = require('express-validator')
 ObjectId = require('mongodb').ObjectID;
 
 

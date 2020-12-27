@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const {check, validationResult} = require('express-validator/check')
+const {check, validationResult} = require('express-validator')
 const User = require('../../models/User')
 const Product = require('../../models/Product')
 const Service = require('../../models/Service')
@@ -49,8 +49,8 @@ router.post('/', [
              number,
              location,
              major,
-             interests
-         });
+             interests           
+        });
          // Encrypt the password
          const salt = await bcrypt.genSalt(10);
          user.password = await bcrypt.hash(password, salt);

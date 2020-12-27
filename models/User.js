@@ -41,8 +41,8 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
     interests : {
-        type : [],
-        required : true 
+        type : [String],
+        validate: v => Array.isArray(v) && v.length > 0 
     },
     tokens: [{ //used to log out user from all his sessions
         token: {
