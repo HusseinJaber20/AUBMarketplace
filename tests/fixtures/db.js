@@ -14,7 +14,7 @@ const userOne = {
     major: 'CSE',
     interests: ['programming', 'math'],
     tokens: [{
-        token: jwt.sign({_id: userOneId}, process.env.JWT_SECRET)
+        token: jwt.sign({id: userOneId}, process.env.JWT_SECRET)
     }]
 }
 

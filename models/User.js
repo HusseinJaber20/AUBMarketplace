@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcryptjs')
 const Product = require('./Product')
 const Service = require('./Service')
 //const Transaction = require('./Transaction')
@@ -74,6 +75,18 @@ UserSchema.virtual('products', {
 })
 
 //MIDDLEWARES
+// Hash the plain text password before saving
+UserSchema.pre('save', async function (next) {
+    const user = this
+
+    if(user.isModified('password')){
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+    }
+
+    next()
+})
+
 //delete all services/products/tasks related to a user before deleting it
 UserSchema.pre('remove', async function(next){
     const user = this

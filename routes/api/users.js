@@ -8,8 +8,6 @@ const Service = require('../../models/Service')
 const jwt = require('jsonwebtoken')
 //sending emails
 const {sendWelcomeEmail, sendCancellationEmail} = require('../../emails/account')
-//Used to encrypt,dcrypyt the password
-const bcrypt = require('bcryptjs')
 const auth = require('../../middleware/auth')
 
 
@@ -51,20 +49,17 @@ router.post('/', [
              major,
              interests           
         });
-         // Encrypt the password
-         const salt = await bcrypt.genSalt(10);
-         user.password = await bcrypt.hash(password, salt);
 
-         const payload = {
-             user : {
-                 id: user.id
-             }
-         }
+        await user.save();
+        sendWelcomeEmail(user.email, user.name)
 
-         await user.save();
-         sendWelcomeEmail(user.email, user.name)
+        const payload = {
+            user : {
+                id: user._id
+            }
+        }
 
-         jwt.sign(
+        jwt.sign(
             payload,
             process.env.JWT_SECRET, 
             {expiresIn: 36000},
@@ -74,7 +69,7 @@ router.post('/', [
                 }
                 res.json({token});
             }
-         )
+        )
     } catch(err){
         console.error(err.message);
         res.status(500).send({'Message': err.message})
