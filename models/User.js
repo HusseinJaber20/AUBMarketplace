@@ -90,11 +90,14 @@ UserSchema.pre('save', async function (next) {
 //delete all services/products/tasks related to a user before deleting it
 UserSchema.pre('remove', async function(next){
     const user = this
-    await Service.deleteMany({owner: user._id})
-    await Product.deleteMany({owner: user._id})
-    // await Transaction.deleteMany({buyer: user._id})
-    // await Transaction.deleteMany({seller: user._id})
-
+    await user.populate('products').execPopulate()
+    user.products.forEach(async (product) => {
+        await product.remove()
+    })
+    await user.populate('services').execPopulate()
+    user.services.forEach(async (service) => {
+        await service.remove()
+    })
     next()
 })
 

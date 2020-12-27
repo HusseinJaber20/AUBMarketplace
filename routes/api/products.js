@@ -81,10 +81,11 @@ router.patch('/:id', auth, async (req, res) => {
 // Delete Product  
 router.delete('/:id', auth, async (req,res) => {
     try {
-        const product = await Product.findOneAndDelete({_id: req.params.id, owner: req.user.id})
+        const product = await Product.findOne({_id: req.params.id, owner: req.user.id})
         if(!product){
             return res.status(404).send()
         }
+        await product.remove()
         res.json({"message" : "Deleted Product Successfully"});
     } catch(err){
         console.error(err.message);
