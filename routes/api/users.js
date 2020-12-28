@@ -10,15 +10,6 @@ const jwt = require('jsonwebtoken')
 const {sendWelcomeEmail, sendCancellationEmail} = require('../../emails/account')
 const auth = require('../../middleware/auth')
 
-
-// Notes: - anything that returns a promise should have an await before or we can use .then() 
-//        - express validator validates the req body
-//        - bycrpt is used to hash the password
-
-// @route  api/users
-// @desc   Register a User
-// @acess  Public
-
 // Create a user
 router.post('/', [
     check('name','Name is required').not().isEmpty(),
@@ -116,7 +107,15 @@ router.patch('/', auth, async (req, res) => {
 })
 
 
-// Read/View user profile (HJ: Found in Auth.js)
+// Read/View user profile by id
+router.get('/:id', auth, async(req,res) =>{
+    try{
+        const user = await User.findById(req.params.id).select('-password').select('-tokens')
+        res.send(user)
+    } catch(err){
+        res.status(400).send({err: 'User not found with such a token'})
+    }
+})
 
 
 

@@ -45,7 +45,24 @@ router.get('/', auth, async (req, res) => {
 })
 
 // Read single product by id
+router.get('/:id', auth, async(req,res) =>{
+    try{
+        const product = await Product.findById(req.params.id)
+        res.send(product)
+    } catch(err){
+        res.status(400).send({err: 'Product not found with such an id'})
+    }
+})
 
+// Get Products with a specific category
+router.get('/category/:category' , auth , async(req,res) => {
+    try{
+        let products = await Product.find({category : req.params.category}).sort({$natural: -1}).limit(10);
+        res.send(products)
+    } catch(err){
+        res.status(400).send(err)
+    }
+})
 
 // Update product by ID
 router.patch('/:id', auth, async (req, res) => {
