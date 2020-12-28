@@ -11,7 +11,7 @@ router.get('/', auth, async (req,res) => {
                 "$search": {
                     "autocomplete": {
                         "query": `${req.query.query}`,
-                        "path": "name",
+                        "path": "description",
                         "fuzzy": {
                             "maxEdits": 2,
                             "prefixLength": 3

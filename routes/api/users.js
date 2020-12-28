@@ -67,7 +67,7 @@ router.post('/', [
                 if(err){
                     throw err;
                 }
-                res.json({_id: user.id, token});
+                res.json({token});
             }
         )
     } catch(err){
