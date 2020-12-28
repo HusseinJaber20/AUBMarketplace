@@ -14,6 +14,7 @@ const ProductSchema = new mongoose.Schema({
         type: String,
         enum : CATEGORY,
         default: 'Other',
+        index: true,
         required: true
     },
     description : {

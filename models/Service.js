@@ -15,6 +15,7 @@ const ServiceSchema = new mongoose.Schema({
         type: String,
         enum : CATEGORY,
         default: 'Other',
+        index: true,
         required: true
     },
     status : {

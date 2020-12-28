@@ -67,7 +67,7 @@ router.get('/:id', auth, async (req, res) => {
 // Get Services with a specific category
 router.get('/category/:category' , auth , async(req,res) => {
     try{
-        let services = await Service.find({category : req.params.category}).sort({$natural: -1}).limit(10);
+        let services = await Service.find({category : req.params.category, status : 'Available' }).sort({$natural: -1}).limit(10);
         res.send(services)
     } catch(err){
         res.status(400).send(err)
