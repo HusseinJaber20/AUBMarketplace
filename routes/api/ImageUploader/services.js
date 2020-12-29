@@ -8,23 +8,26 @@ const singleUpload = FileUpload.upload.single('image')
 
 // Uploads an image to Amazon S3 object store and stores the image's link in the service's images table.
 router.post('/:id', auth,  async (req,res) => {
-    singleUpload(req,res, async function(err){
-        if(err){
-            return res.json({'error' : err})
+    try{
+        const service = await Service.findOne({_id:req.params.id, owner: req.user.id})
+        if(!service){
+            return res.status(401).json({err : "You are not the owner of the service"})
         }
-        try{
-            const service = await Service.findOne({_id:req.params.id, owner: req.user.id})
-            if(!service){
-                return res.status(401).json({err : "You are not the owner of the service"})
+        singleUpload(req,res, async function(err){
+            if(err){
+                return res.json({'error' : err})
             }
-            service.images.push(req.file.location)
-            await service.save()
-            return res.json({'imageURL' : req.file.location})
-        }catch(e){
-            console.log(e)
-        }
-        
-    })
+            try{
+                service.images.push(req.file.location)
+                await service.save()
+                return res.json({'imageURL' : req.file.location})
+            }catch(e){
+                console.log(e)
+            }
+        })
+    } catch(err){
+        res.status(401).json(err)
+    }
 })
 
 router.delete('/:serviceid/:imageURL', auth, async(req,res) => {
