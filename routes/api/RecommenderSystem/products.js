@@ -11,7 +11,7 @@ router.get('/', auth, async (req,res) => {
     let user = await User.findById(req.user.id)
     ret  = []
     products.forEach(product => {
-        product.majors.includes(user.major) ? ret.push(product) : ret = ret
+        product.majors.includes(user.major) && product.owner!=req.user.id ? ret.push(product) : ret = ret
     })
     res.send(ret)
 })

@@ -48,9 +48,12 @@ router.get('/', auth, async (req, res) => {
 router.get('/:id', auth, async(req,res) =>{
     try{
         const product = await Product.findById(req.params.id)
+        if(!product){
+            return res.status(400).send({err: 'Product not found with such an id'})
+        }
         res.send(product)
     } catch(err){
-        res.status(400).send({err: 'Product not found with such an id'})
+        res.status(400).send({err})
     }
 })
 

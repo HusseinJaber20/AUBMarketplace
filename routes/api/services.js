@@ -56,11 +56,11 @@ router.get('/:id', auth, async (req, res) => {
         const service = await Service.findById(_id)
 
         if(!service){  
-            return res.status(404).send()
+            return res.status(400).send({err: 'Service not found with such an id'})
         }
         res.send(service)
     } catch(e) {
-        res.status(500).send()
+        res.status(500).send(e)
     }
 })
 

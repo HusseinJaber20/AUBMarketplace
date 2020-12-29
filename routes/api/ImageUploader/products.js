@@ -45,7 +45,6 @@ router.delete('/:postid/:imageURL', auth, async(req,res) => {
         }
         DeleteImage(s3,params)
         for(var i =0; i<product.images.length; i++){
-            console.log(product.images[i].substr(product.images[i].length - 13))
             if(product.images[i].substr(product.images[i].length - 13) === req.params.imageURL){
                 console.log("HEY")
                 product.images.splice(i,1)
@@ -53,7 +52,6 @@ router.delete('/:postid/:imageURL', auth, async(req,res) => {
                 break
             }
         }
-        console.log(product.images)
         res.status(200).json({Message : "Image Deleted Successfully"})
     } catch(err){
         res.status(401).json({err})
