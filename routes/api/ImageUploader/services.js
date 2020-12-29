@@ -12,19 +12,25 @@ router.post('/:id', auth,  async (req,res) => {
         if(err){
             return res.json({'error' : err})
         }
-        const service = await Service.findOne({_id:req.params.id})
-        service.images.push(req.file.location)
-        await service.save()
-        return res.json({'imageURL' : req.file.location})
+        try{
+            const service = await Service.findOne({_id:req.params.id, owner: req.user.id})
+            if(!service){
+                return res.status(401).json({err : "You are not the owner of the service"})
+            }
+            service.images.push(req.file.location)
+            await service.save()
+            return res.json({'imageURL' : req.file.location})
+        }catch(e){
+            console.log(e)
+        }
+        
     })
 })
 
 router.delete('/:serviceid/:imageURL', auth, async(req,res) => {
     try{
-        const service = await Service.findOne({_id:req.params.postid})
-        if(
-            !service.owner == req.user.id
-        ) {
+        const service = await Service.findOne({_id:req.params.postid, owner: req.user.id})
+        if(!service){
             return res.status(401).json({err : "You are not the owner of the service"})
         }
         const s3 = FileUpload.s3

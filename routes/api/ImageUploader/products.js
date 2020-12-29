@@ -13,7 +13,10 @@ router.post('/:id', auth,  async (req,res) => {
             return res.json({'error' : err})
         }
         try{
-            const product = await Product.findOne({_id:req.params.id})
+            const product = await Product.findOne({_id:req.params.id, owner: req.user.id})
+            if(!product){
+                return res.status(401).json({err : "You are not the owner of the post"}) 
+            }
             product.images.push(req.file.location)
             await product.save()
             return res.json({'imageURL' : req.file.location})
@@ -25,12 +28,11 @@ router.post('/:id', auth,  async (req,res) => {
 
 router.delete('/:postid/:imageURL', auth, async(req,res) => {
     try{
-        const product = await Product.findOne({_id:req.params.postid})
-        if(
-            !product.owner == req.user.id
-        ) {
+        const product = await Product.findOne({_id:req.params.postid, owner: req.user.id})
+        if(!product){
             return res.status(401).json({err : "You are not the owner of the post"})
         }
+
         const s3 = FileUpload.s3
         const DeleteImage = FileUpload.DeleteImage
         const params = {
