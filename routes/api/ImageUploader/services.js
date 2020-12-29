@@ -20,9 +20,9 @@ router.post('/:id', auth,  async (req,res) => {
             try{
                 service.images.push(req.file.location)
                 await service.save()
-                return res.json({'imageURL' : req.file.location})
-            }catch(e){
-                console.log(e)
+                return res.status(201).json({'imageURL' : req.file.location})
+            }catch(err){
+                res.status(401).json({err : "Couldn't find post"})
             }
         })
     } catch(err){
@@ -37,13 +37,13 @@ router.delete('/:serviceid/:imageURL', auth, async(req,res) => {
             return res.status(401).json({err : "You are not the owner of the service"})
         }
         const s3 = FileUpload.s3
-        const DeleteImage = FileUpload.DeleteImage
+        const DeleteImage = await FileUpload.DeleteImage
         const params = {
             Bucket: "aubmarketplace",
             Key: req.params.imageURL
         }
         DeleteImage(s3,params)
-        res.status(201).json({Message : "Image Deleted Successfully"})
+        res.status(200).json({Message : "Image Deleted Successfully"})
     } catch(err){
         res.status(401).json({err})
     } 
