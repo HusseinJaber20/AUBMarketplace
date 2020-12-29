@@ -64,21 +64,10 @@ ServiceSchema.pre('remove', async function(next){
         Key: "filename"
     }
     const images = service.images
+    const DeleteImage = FileUpload.DeleteImage
     images.forEach(async image => {
         params.Key = image.substr(image.length - 13)
-        try {
-            await s3.headObject(params).promise()
-            console.log("File Found in S3")
-            try {
-                await s3.deleteObject(params).promise()
-                console.log("file deleted Successfully")
-            }
-            catch (err) {
-                 console.log("ERROR in file Deleting : " + JSON.stringify(err))
-            }
-        } catch (err) {
-                console.log("File not Found ERROR : " + err.code)
-        }
+        DeleteImage(s3,params)
     })
     next()
 })

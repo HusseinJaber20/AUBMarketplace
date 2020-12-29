@@ -19,4 +19,25 @@ router.post('/:id', auth,  async (req,res) => {
     })
 })
 
+router.delete('/:serviceid/:imageURL', auth, async(req,res) => {
+    try{
+        const service = await Service.findOne({_id:req.params.postid})
+        if(
+            !service.owner == req.user.id
+        ) {
+            return res.status(401).json({err : "You are not the owner of the service"})
+        }
+        const s3 = FileUpload.s3
+        const DeleteImage = FileUpload.DeleteImage
+        const params = {
+            Bucket: "aubmarketplace",
+            Key: req.params.imageURL
+        }
+        DeleteImage(s3,params)
+        res.status(201).json({Message : "Image Deleted Successfully"})
+    } catch(err){
+        res.status(401).json({err})
+    } 
+})
+
 module.exports = router
