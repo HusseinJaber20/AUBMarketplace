@@ -43,6 +43,13 @@ router.delete('/:serviceid/:imageURL', auth, async(req,res) => {
             Key: req.params.imageURL
         }
         DeleteImage(s3,params)
+        for(var i =0; i<service.images.length; i++){
+            if(service.images[i].substr(service.images[i].length - 13) === req.params.imageURL){
+                service.images.splice(i,1)
+                await service.save()
+                break
+            }
+        }
         res.status(200).json({Message : "Image Deleted Successfully"})
     } catch(err){
         res.status(401).json({err})
