@@ -11,6 +11,13 @@ const {
     } = require('./fixtures/db')
 
 beforeEach(setupDatabase)
+
+//IMPORTANT NOTE:tests related to files might require you to run them more than once.
+//this is a common issue with file testing
+//sometimes the issue might be related to your internet connection (since we're uploading images to aws.S3)
+//try running each test separately for accurate results
+
+
 //List of tests
 /*
     //Products
@@ -25,16 +32,25 @@ beforeEach(setupDatabase)
 
 //Products
 
-test('Should upload and delete product image', async () => {
+test('Should upload product image', async () => {
+    await request(app)
+        .post(`/api/image/products/${productOne._id}`)
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .attach('image', 'tests/fixtures/picture.jpeg')
+        .expect(201)
+    
+    const product = await Product.findById(productOne._id)
+    expect(product.images[0]).not.toBe(undefined)
+})
+
+test('Should delete product image', async () => { 
+    //uploading an image first
     const response = await request(app)
         .post(`/api/image/products/${productOne._id}`)
         .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
         .attach('image', 'tests/fixtures/picture.jpeg')
         .expect(201)
     
-    var product = await Product.findById(productOne._id)
-    expect(product.images[0]).not.toBe(undefined)
-
     //delete
     const url = response.body.imageURL
     const img = url.substr(url.lastIndexOf('/') + 1);
@@ -43,27 +59,14 @@ test('Should upload and delete product image', async () => {
         .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
         .expect(200)
 
-    product = await Product.findById(productOne._id)
-    console.log(product)
+    const product = await Product.findById(productOne._id)
     expect(product.images[0]).toBe(undefined)
 })
 
-// test('Should not upload image to other users products', async () => {
-//     await request(app)
-//         .post(`/api/image/products/${productOne._id}`)
-//         .set('Authorization', `Bearer ${userTwo.tokens[0].token}`)
-//         .attach('image', 'tests/fixtures/picture.jpeg')
-//         .expect(401)
-    
-//     // const product = await Product.findById(productOne._id)
-//     // //console.log(product.images)
-//     // expect(product.images[0]).toBe(undefined)
-// })
-
 //Services
 
-test('Should upload and delete service image', async () => {
-    const response = await request(app)
+test('Should upload service image', async () => {
+    await request(app)
         .post(`/api/image/services/${serviceOne._id}`)
         .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
         .attach('image', 'tests/fixtures/picture.jpeg')
@@ -71,14 +74,22 @@ test('Should upload and delete service image', async () => {
     
     const service = await Service.findById(serviceOne._id)
     expect(service.images[0]).not.toBe(undefined)
+})
+
+test('Should delete service image', async () => {
+    //upload image first
+    const response = await request(app)
+        .post(`/api/image/services/${serviceOne._id}`)
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .attach('image', 'tests/fixtures/picture.jpeg')
+        .expect(201)
 
     //delete
-    console.log(response.body)
     const url = response.body.imageURL
     const img = url.substr(url.lastIndexOf('/') + 1);
     await request(app)
         .delete(`/api/image/services/${serviceOne._id}/${img}`)
         .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
         .expect(200)
-
 })
+

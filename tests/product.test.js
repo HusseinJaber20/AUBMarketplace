@@ -64,7 +64,7 @@ test('Should not create product for unauthenticated user', async () => {
         .expect(401)
 })
 
-test('Should not create product with invalid/missing field', async () => {
+test('Should not create product with invalid field', async () => {
     //invalid field
     await request(app)
         .post('/api/products')
@@ -76,7 +76,9 @@ test('Should not create product with invalid/missing field', async () => {
             majors: ['CCE', 'ECE', 'CSE'],
         })
         .expect(400)
-    
+})
+
+test('Should not create product with missing field', async () => {
     //missing field name
     await request(app)
         .post('/api/products')

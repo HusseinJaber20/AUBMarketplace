@@ -58,7 +58,7 @@ const serviceThree = {
     description: 'Third service',
     category: 'Other',
     salary: 15000,
-    majors: ['CCE', 'ECE'],
+    majors: ['CCE', 'CSE'],
     owner: userTwo._id
 }
 

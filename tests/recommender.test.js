@@ -30,7 +30,7 @@ test('Should recommend products based on major', async () => {
         .send()
         .expect(200)
     
-    expect(response.body.length).toBe(2)
+    expect(response.body.length).toBe(1)
 })
 
 //Services

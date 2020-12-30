@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router();
 const Product = require('../../../models/Product')
-const FileUpload = require('../ImageUploader/file-upload')
+const {upload,s3,DeleteImage} = require('../ImageUploader/file-upload')
 const auth = require('../../../middleware/auth')
 
-const singleUpload = FileUpload.upload.single('image')
+const singleUpload = upload.single('image')
 
 // Uploads an image to Amazon S3 object store and stores the image's link in the product's images table.
 router.post('/:id', auth,  async (req,res) => {
@@ -13,7 +13,7 @@ router.post('/:id', auth,  async (req,res) => {
         if(!product){
             return res.status(401).json({err : "You are not the owner of the post"}) 
         }
-        singleUpload(req,res, async function(err){
+        await singleUpload(req,res, async function(err){
             if(err){
                 return res.json({'error' : err})
             }
@@ -37,16 +37,13 @@ router.delete('/:postid/:imageURL', auth, async(req,res) => {
             return res.status(401).json({err : "You are not the owner of the post"})
         }
 
-        const s3 = FileUpload.s3
-        const DeleteImage = await FileUpload.DeleteImage
         const params = {
             Bucket: "aubmarketplace",
             Key: req.params.imageURL
         }
-        DeleteImage(s3,params)
+        await DeleteImage(s3,params)
         for(var i =0; i<product.images.length; i++){
             if(product.images[i].substr(product.images[i].length - 13) === req.params.imageURL){
-                console.log("HEY")
                 product.images.splice(i,1)
                 await product.save()
                 break
