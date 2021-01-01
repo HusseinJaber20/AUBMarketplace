@@ -43,6 +43,7 @@ test('Should upload product image', async () => {
     expect(product.images[0]).not.toBe(undefined)
 })
 
+/*
 test('Should delete product image', async () => { 
     //uploading an image first
     const response = await request(app)
@@ -93,3 +94,4 @@ test('Should delete service image', async () => {
         .expect(200)
 })
 
+*/

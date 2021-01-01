@@ -24,5 +24,7 @@ app.use('/api/search/products', require('./routes/api/SearchEngine/products'));
 app.use('/api/search/services', require('./routes/api/SearchEngine/services'));
 app.use('/api/image/services' , require('./routes/api/ImageUploader/services'));
 app.use('/api/image/products' , require('./routes/api/ImageUploader/products'));
+app.use('/api/market/products', require('./routes/api/MarketModel/products'));
+app.use('/api/market/services', require('./routes/api/MarketModel/services'))
 
 module.exports = app

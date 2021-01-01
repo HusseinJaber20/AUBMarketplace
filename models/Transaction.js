@@ -2,25 +2,18 @@ const mongoose = require('mongoose');
 const Product = require('./Product');
 const User = require('./User');
 
-const TYPE = ['Product' , 'Service']
-
 const TransactionSchema = new mongoose.Schema({
-    buyer : {
+    owner : {
         type : mongoose.Schema.Types.ObjectId,
         required : true,
         ref: 'User'
     },
-    seller : {
+    applicant : {
         type : mongoose.Schema.Types.ObjectId,
         required : true,
         ref: 'User'
     },
-    type : {
-        type : String,
-        enum : TYPE,
-        require : true
-    },
-    item : {
+    service : {
         type : mongoose.Schema.Types.ObjectId,
         require : true,
     },
