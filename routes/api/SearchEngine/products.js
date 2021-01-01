@@ -21,7 +21,13 @@ router.get('/', auth, async (req,res) => {
                 }
             }
         ])
-        res.send(result);
+        ret = []
+        result.forEach( product => {
+            if(product.status == 'Available'){
+                ret.push(product)
+            }
+        })
+        res.send(ret);
     } catch (e) {
         res.status(500).send({ message: e.message });
     }

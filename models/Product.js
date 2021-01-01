@@ -50,6 +50,11 @@ const ProductSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User'
+    },
+    candidate : {
+        type : mongoose.Schema.Types.ObjectId,
+        required : false,
+        ref: 'User',
     }
 },{
     timestamps: true

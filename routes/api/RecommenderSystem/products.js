@@ -7,7 +7,7 @@ const router = express.Router();
 
 // get recommended products
 router.get('/', auth, async (req,res) => {
-    let products = await Product.find({}).sort({$natural: -1}).limit(100);
+    let products = await Product.find({ status : 'Available'}).sort({$natural: -1}).limit(100);
     let user = await User.findById(req.user.id)
     ret  = []
     products.forEach(product => {
@@ -18,13 +18,13 @@ router.get('/', auth, async (req,res) => {
 
 // get hottest products
 router.get('/hottest', auth, async (req,res) => {
-    let data = await Product.find({}).sort({$natural: -1}).limit(5);
+    let data = await Product.find({ status : 'Available'}).sort({$natural: -1}).limit(5);
     res.json({data})
 })
 
 // get newest products
 router.get('/latest', auth, async (req,res) => {
-    let data = await Product.find({}).sort({$natural: -1}).limit(10);
+    let data = await Product.find({ status : 'Available'}).sort({$natural: -1}).limit(10);
     res.json({data})
 })
 

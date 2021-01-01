@@ -17,6 +17,7 @@ router.patch('/buy/:id', auth, async(req,res) => {
             return res.status(400).send({err: 'You can not buy this product'})
         }
         product.status = 'Pending'
+        product.candidate = req.user.id
         await product.save()
         const seller = await User.findById(product.owner)
         const buyer = await User.findById(req.user.id)
@@ -53,14 +54,12 @@ router.patch('/reject/:id', auth, async(req,res) => {
             return res.status(201).json({Message : 'Product already not pending!'})
         }
         product.status = 'Available'
+        product.candidate = undefined
         await product.save()
         return res.status(201).json({Message : 'Status Changed'})
     } catch(err){
         return res.status(401).send(err)
     }
 })
-
-//read user who requested the product
-
 
 module.exports = router;

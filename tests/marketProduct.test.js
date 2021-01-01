@@ -10,6 +10,24 @@ const {
 
 beforeEach(setupDatabase)
 
-test('Should request a product', async () => {
-    
-})
+// test('Should request a product', async () => {
+//     const response = await request(app)
+//         .get(`/api/market/products/buy/${productOne._id}`)
+//         .set('Authorization', `Bearer ${userTwo.tokens[0].token}`)
+//         .send()
+//         .expect(201)
+// })
+
+// test('Should not request your own product', async () => {
+//     const response = await request(app)
+//         .get(`/api/market/products/buy/${productOne._id}`)
+//         .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+//         .send()
+//         .expect(400)
+// })
+
+
+
+
+
+
