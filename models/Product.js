@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const FileUpload = require('../routes/api/ImageUploader/file-upload')
 
-const STATUS = ['Available' , 'Sold']
+const STATUS = ['Available' , 'Pending', 'Sold']
 const CATEGORY = ['Book', 'Notes', 'Supplies' , 'Electronics', 'Other']
 const CURRENCY = ['LBP', 'USD']
 
