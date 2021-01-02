@@ -58,7 +58,7 @@ const ServiceSchema = new mongoose.Schema({
 ServiceSchema.virtual('applicants', {
     ref: 'Transaction',
     localField: '_id',
-    foreignField: 'applicant' 
+    foreignField: 'service' 
 })
 
 //Middlewares

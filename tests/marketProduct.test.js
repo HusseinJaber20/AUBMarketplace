@@ -1,12 +1,14 @@
 const request = require('supertest')
 const app = require('../app')
-const Product = require('../models/product')
+const Product = require('../models/Product')
 const {     
     userOneId, userOne,
     userTwoId, userTwo,
     productOne, productTwo, productThree,
     setupDatabase 
     } = require('./fixtures/db')
+
+jest.mock('../emails/account')
 
 beforeEach(setupDatabase)
 

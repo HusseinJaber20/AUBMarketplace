@@ -3,6 +3,7 @@ const app = require('../app')
 const User = require('../models/User')
 const Product = require('../models/Product')
 const Service = require('../models/Service')
+const Transaction = require('../models/Transaction')
 const { userOneId, userOne, userTwoId, userTwo, setupDatabase } = require('./fixtures/db')
 
 jest.mock('../emails/account')
@@ -186,6 +187,12 @@ test('Should delete account for user', async () => {
 
     const service = await Service.findOne({owner: userOneId})
     expect(service).toBeNull()
+
+    const transactionOwned = await Transaction.findOne({owner: userOneId})
+    expect(transactionOwned).toBeNull()
+
+    const transactionAppliedTo = await Transaction.findOne({applicant: userOneId})
+    expect(transactionAppliedTo).toBeNull()
 })
 
 test('Should not delete account for unauthenticated user', async () => {

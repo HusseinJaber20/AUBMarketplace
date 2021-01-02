@@ -32,6 +32,11 @@ beforeEach(setupDatabase)
 
 //Products
 
+test('dummy', async () => {
+
+})
+
+/*
 test('Should upload product image', async () => {
     await request(app)
         .post(`/api/image/products/${productOne._id}`)
@@ -43,7 +48,7 @@ test('Should upload product image', async () => {
     expect(product.images[0]).not.toBe(undefined)
 })
 
-/*
+
 test('Should delete product image', async () => { 
     //uploading an image first
     const response = await request(app)

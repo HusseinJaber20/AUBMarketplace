@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const Product = require('./Product')
 const Service = require('./Service')
-//const Transaction = require('./Transaction')
+const Transaction = require('./Transaction')
 
 // Each Schema in mongoose maps to a MongoDB collection and defines
 // the shape of the documents within that collection.
@@ -74,6 +74,12 @@ UserSchema.virtual('products', {
     foreignField: 'owner' 
 })
 
+UserSchema.virtual('applications', {
+    ref: 'Transaction',
+    localField: '_id',
+    foreignField: 'applicant' 
+})
+
 //MIDDLEWARES
 // Hash the plain text password before saving
 UserSchema.pre('save', async function (next) {
@@ -98,6 +104,8 @@ UserSchema.pre('remove', async function(next){
     user.services.forEach(async (service) => {
         await service.remove()
     })
+    await Transaction.deleteMany({owner: user._id})
+    await Transaction.deleteMany({applicant: user._id})
     next()
 })
 

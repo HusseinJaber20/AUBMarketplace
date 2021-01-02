@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const User = require('../../models/User')
 const Product = require('../../models/Product')
 const Service = require('../../models/Service')
+const Transaction = require('../../models/Transaction')
 
 const userOneId = new mongoose.Types.ObjectId()
 const userOne = {
@@ -29,6 +30,20 @@ const userTwo = {
     interests: ['circuits'],
     tokens: [{
         token: jwt.sign({id: userTwoId}, process.env.JWT_SECRET)
+    }]
+}
+
+const userThreeId = new mongoose.Types.ObjectId()
+const userThree = {
+    _id: userThreeId,
+    name: 'Mike',
+    email: 'mike@mail.aub.edu',
+    password: 'Mike.123',
+    number: 23456,
+    major: 'ECE',
+    interests: ['resistors', 'conductors'],
+    tokens: [{
+        token: jwt.sign({id: userThreeId}, process.env.JWT_SECRET)
     }]
 }
 
@@ -62,6 +77,17 @@ const serviceThree = {
     owner: userTwo._id
 }
 
+const serviceFour = {
+    _id: new mongoose.Types.ObjectId(),
+    name: 'service4',
+    description: 'Fourth service',
+    category: 'Research Assistant',
+    status: 'Fulfilled',
+    salary: 15000,
+    majors: ['ECE'],
+    owner: userThree._id
+}
+
 const productOne = {
     _id: new mongoose.Types.ObjectId(),
     name: 'CLRS',
@@ -92,24 +118,54 @@ const productThree = {
     owner: userTwo._id 
 }
 
+const transactionOne = {
+    _id: new mongoose.Types.ObjectId(),
+    owner: userOneId,
+    applicant: userTwoId,
+    service: serviceOne._id
+}
+
+const transactionTwo = {
+    _id: new mongoose.Types.ObjectId(),
+    owner: userOneId,
+    applicant: userTwoId,
+    service: serviceTwo._id
+}
+
+const transactionThree = {
+    _id: new mongoose.Types.ObjectId(),
+    owner: userOneId,
+    applicant: userThreeId,
+    service: serviceTwo._id
+}
+
 const setupDatabase = async () => {
     await User.deleteMany()
     await Service.deleteMany()
     await Product.deleteMany()
+    await Transaction.deleteMany()
     await new User(userOne).save()
     await new User(userTwo).save()
+    await new User(userThree).save()
     await new Service(serviceOne).save()
     await new Service(serviceTwo).save()
     await new Service(serviceThree).save()
+    await new Service(serviceFour).save()
     await new Product(productOne).save()
     await new Product(productTwo).save()
     await new Product(productThree).save()
+    await new Transaction(transactionOne).save()
+    await new Transaction(transactionTwo).save()
+    await new Transaction(transactionThree).save()
+    
 }
 
 module.exports = {
     userOneId, userOne,
     userTwoId, userTwo,
-    serviceOne, serviceTwo, serviceThree,
+    userThreeId, userThree,
+    serviceOne, serviceTwo, serviceThree, serviceFour,
     productOne, productTwo, productThree,
+    transactionOne, transactionTwo, transactionThree,
     setupDatabase
 }
