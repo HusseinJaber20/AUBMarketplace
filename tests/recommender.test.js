@@ -30,7 +30,7 @@ test('Should recommend products based on major', async () => {
         .send()
         .expect(200)
     
-    expect(response.body.length).toBe(1)
+    expect(response.body.data.length).toBe(1)
 })
 
 //Services
@@ -41,7 +41,7 @@ test('Should recommend service based on major', async () => {
         .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
         .send()
         .expect(200)
-    
-    expect(response.body.length).toBe(1)
+
+    expect(response.body.data.length).toBe(1)
 })
 

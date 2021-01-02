@@ -9,11 +9,11 @@ const router = express.Router();
 router.get('/', auth, async (req,res) => {
     let services = await Service.find({ status : 'Available'}).sort({$natural: -1}).limit(100);
     let user = await User.findById(req.user.id)
-    ret  = []
+    data = []
     services.forEach(service => {
-        service.majors.includes(user.major) && service.owner!=req.user.id ? ret.push(service) : ret = ret
+        service.majors.includes(user.major) && service.owner!=req.user.id ? data.push(service) : data = data
     })
-    res.send(ret)
+    res.send({data})
 })
 
 // get hottest services

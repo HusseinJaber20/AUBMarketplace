@@ -46,7 +46,7 @@ const sendCancellationEmail = (email, name) => {
     })
 }
 
-//Email sent once a new user signs up
+//Email sent once a new user requersts a product
 const sendRequestEmail = (email, seller, buyer) => {
     sgMail.send({
         to: email,
@@ -66,9 +66,30 @@ const sendRequestEmail = (email, seller, buyer) => {
     })
 }
 
+//email sent once a user applies for a service
+const sendApplicationEmail = (email, name, applicant) => {
+    sgMail.send({
+        to: email,
+        from: process.env.SENDGRID_SENDER_EMAIL,
+        subject: 'Someone applied for your service!',
+        html: `
+        <div>Hi ${name},&nbsp;</div>
+        <div>&nbsp;</div>
+        <div>We&#39;re happy to inform you the ${applicant} applied to fulfill your service.</div>
+        <div>Please check the application for more information!</div>
+        <div>&nbsp;</div>
+        <div>Best regards,</div>
+        <div>AUB Marketplace Team</div>
+        `
+    }).catch((e)=>{
+        console.log(e)
+    })
+}
+
 
 module.exports = {
     sendWelcomeEmail,
     sendCancellationEmail,
-    sendRequestEmail
+    sendRequestEmail,
+    sendApplicationEmail
 }

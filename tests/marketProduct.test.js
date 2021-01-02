@@ -10,6 +10,9 @@ const {
 
 beforeEach(setupDatabase)
 
+test('', async () => {
+    
+})
 // test('Should request a product', async () => {
 //     const response = await request(app)
 //         .get(`/api/market/products/buy/${productOne._id}`)

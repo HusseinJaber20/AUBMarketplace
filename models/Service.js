@@ -55,6 +55,12 @@ const ServiceSchema = new mongoose.Schema({
     timestamps: true
 });
 
+ServiceSchema.virtual('applicants', {
+    ref: 'Transaction',
+    localField: '_id',
+    foreignField: 'applicant' 
+})
+
 //Middlewares
 ServiceSchema.pre('remove', async function(next){
     const service = this

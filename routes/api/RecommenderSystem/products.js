@@ -9,11 +9,11 @@ const router = express.Router();
 router.get('/', auth, async (req,res) => {
     let products = await Product.find({ status : 'Available'}).sort({$natural: -1}).limit(100);
     let user = await User.findById(req.user.id)
-    ret  = []
+    data  = []
     products.forEach(product => {
-        product.majors.includes(user.major) && product.owner!=req.user.id ? ret.push(product) : ret = ret
+        product.majors.includes(user.major) && product.owner!=req.user.id ? data.push(product) : data = data
     })
-    res.send(ret)
+    res.send({data})
 })
 
 // get hottest products

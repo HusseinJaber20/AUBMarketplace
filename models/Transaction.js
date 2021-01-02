@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const Product = require('./Product');
-const User = require('./User');
 
 const TransactionSchema = new mongoose.Schema({
     owner : {
@@ -16,6 +14,7 @@ const TransactionSchema = new mongoose.Schema({
     service : {
         type : mongoose.Schema.Types.ObjectId,
         require : true,
+        ref: 'Service'
     },
     open : {
         type: Boolean,
