@@ -45,6 +45,11 @@ const UserSchema = new mongoose.Schema({
         type : [String],
         validate: v => Array.isArray(v) && v.length > 0 
     },
+    rate : {
+        type : [],
+        required : true,
+        default : [-1,0]  // ["Number of ratings", "Total of ratings"]
+    },
     tokens: [{ //used to log out user from all his sessions
         token: {
             type: String,

@@ -22,9 +22,9 @@ router.get('/', auth, async (req,res) => {
             }
         ])
         ret = []
-        result.forEach( product => {
-            if(product.status == 'Available'){
-                ret.push(product)
+        result.forEach( service => {
+            if(service.status == 'Available'){
+                ret.push(service)
             }
         })
         res.send(ret);

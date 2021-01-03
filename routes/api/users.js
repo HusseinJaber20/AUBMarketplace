@@ -2,8 +2,6 @@ const express = require('express')
 const router = express.Router();
 const {check, validationResult} = require('express-validator')
 const User = require('../../models/User')
-const Product = require('../../models/Product')
-const Service = require('../../models/Service')
 //Used for validating the User
 const jwt = require('jsonwebtoken')
 //sending emails
@@ -38,7 +36,7 @@ router.post('/', [
              number,
              location,
              major,
-             interests           
+             interests         
         });
 
         await user.save();
@@ -114,6 +112,25 @@ router.get('/:id', auth, async(req,res) =>{
         res.send(user)
     } catch(err){
         res.status(400).send({err: 'User not found with such a token'})
+    }
+})
+
+router.patch('/rate/:id/:number', auth, async(req,res) => {
+    try {
+        rating = parseInt(req.params.number)
+        if(rating<0 || rating>5){
+            return res.status(400).send({'err' : 'Rating should be between 0 and 5 inclusive'})
+        }
+        const user = await User.findById(req.params.id)
+        if(user.rate[0] == -1){ // -1 means the user has neven been rated before
+            user.rate[0] = 0;
+        }
+        updatedRate = [user.rate[0]+1, user.rate[1] + rating]
+        user.rate = updatedRate
+        await user.save()
+        return res.status(200).send({'Rate' : updatedRate[1] / updatedRate[0]})
+    } catch(err){
+        res.status(400).send(err)
     }
 })
 
