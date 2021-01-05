@@ -115,6 +115,7 @@ router.get('/:id', auth, async(req,res) =>{
     }
 })
 
+//Rate a user
 router.patch('/rate/:id/:number', auth, async(req,res) => {
     try {
         rating = parseInt(req.params.number)
@@ -133,7 +134,6 @@ router.patch('/rate/:id/:number', auth, async(req,res) => {
         res.status(400).send(err)
     }
 })
-
 
 
 

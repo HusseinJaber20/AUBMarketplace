@@ -61,10 +61,28 @@ router.patch('/fulfill/:id', auth, async (req, res) =>{
         if(!service){
             return res.status(404).send()
         }
-        await Transaction.deleteMany({service: service._id})     
+        await Transaction.deleteMany({service: service._id, open: true})     
         service.status = 'Fulfilled'
         await service.save()   
         res.status(200).send(service)
+
+    } catch(e) {
+        res.status(500).send(e)
+    }
+})
+
+//Mark transaction as closed [meaning that a user was accepted to fulfill the service]
+router.patch('/accept/:id', auth, async (req, res) =>{
+    try {
+        const transaction =  await Transaction.findOne({_id: req.params.id, owner: req.user.id})
+        if(!transaction){
+            return res.status(404).send()
+        }
+
+        transaction[open] = false
+
+        await transaction.save()
+        res.status(200).send(transaction)
 
     } catch(e) {
         res.status(500).send(e)
@@ -85,6 +103,26 @@ router.get('/applicants/:id', auth, async (req, res) => {
     }
 })
 
+//Read all users who fulfilled a specific service
+router.get('/fulfillers/:id', auth, async (req, res) => {
+    try {
+        const service = await Service.findOne({_id:req.params.id, owner:req.user.id})
+        if(!service){
+            return res.status(404).send()
+        }
+        await service.populate('applicants').execPopulate()
+        var fulfillers = []
+
+        service.applicants.forEach(transaction => {
+            transaction.open === false ? fulfillers.push(transaction) : fulfillers = fulfillers
+        })
+
+        res.send(fulfillers)
+    } catch(e){
+        res.status(500).send()
+    }
+})
+
 //Read all services that a user applied to
 router.get('/applications', auth, async (req, res) => {
     try{
@@ -100,6 +138,19 @@ router.get('/applications', auth, async (req, res) => {
     }
 })
 
+//Read a user's history [all the services he fulfilled]
+router.get('/history', auth, async (req, res) => {
+    try{
+        const transactions = await Transaction.find({applicant: req.user.id, open: false})
+        
+        res.send(transactions)
+
+    }catch(e){
+        res.status(500).send()
+    }
+})
+
+//delete application of user
 router.delete('/applications/:id', auth, async (req, res) => {
     try{
         const transaction = await Transaction.findOne({_id: req.params.id, applicant: req.user.id})

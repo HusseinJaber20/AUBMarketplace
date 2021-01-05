@@ -139,6 +139,14 @@ const transactionThree = {
     service: serviceTwo._id
 }
 
+const transactionFour = {
+    _id: new mongoose.Types.ObjectId(),
+    open: false,
+    owner: userThreeId,
+    applicant: userTwo,
+    service: serviceFour._id
+}
+
 const setupDatabase = async () => {
     await User.deleteMany()
     await Service.deleteMany()
@@ -157,6 +165,7 @@ const setupDatabase = async () => {
     await new Transaction(transactionOne).save()
     await new Transaction(transactionTwo).save()
     await new Transaction(transactionThree).save()
+    await new Transaction(transactionFour).save()
     
 }
 
@@ -166,6 +175,6 @@ module.exports = {
     userThreeId, userThree,
     serviceOne, serviceTwo, serviceThree, serviceFour,
     productOne, productTwo, productThree,
-    transactionOne, transactionTwo, transactionThree,
+    transactionOne, transactionTwo, transactionThree, transactionFour,
     setupDatabase
 }

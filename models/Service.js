@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const FileUpload = require('../routes/api/ImageUploader/file-upload')
+const Transaction = require('./Transaction')
 
 const CATEGORY = ['Teaching Assistant', 'Research Assistant', 'Group Project', 'Full Time Job', 'Part Time Job', 'Task', 'Other']
 const STATUS = ['Available' , 'Fulfilled']
@@ -75,6 +76,8 @@ ServiceSchema.pre('remove', async function(next){
         params.Key = image.substr(image.length - 13)
         DeleteImage(s3,params)
     })
+
+    await Transaction.deleteMany({service: service._id})     
     next()
 })
 // You can think of a model as a constructor. It will be used too to query from the DB.

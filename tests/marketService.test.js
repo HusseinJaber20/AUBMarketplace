@@ -7,7 +7,7 @@ const {
     userTwoId, userTwo,
     userThreeId, userThree,
     serviceOne, serviceTwo, serviceThree, serviceFour,
-    transactionOne, transactionTwo, transactionThree,
+    transactionOne, transactionTwo, transactionThree, transactionFour,
     setupDatabase 
     } = require('./fixtures/db')
 
@@ -71,7 +71,7 @@ test('Should mark service as fulfilled', async () => {
     expect(service.status).toEqual('Fulfilled')
 
     //make sure no more transactions related to it in the DB
-    const transactions = await Transaction.find({service: serviceOne._id})
+    const transactions = await Transaction.find({service: serviceOne._id, open: true})
     expect(transactions.length).toBe(0)
 })
 
@@ -109,6 +109,18 @@ test('Should not get applicants of other users service', async () => {
         .expect(404)
 })
 
+//Read fulfillers of service
+
+test('Should read all users who fulfilled a specific service', async () => {
+    const response = await request(app)
+        .get(`/api/market/services/fulfillers/${serviceFour._id}`)
+        .set('Authorization', `Bearer ${userThree.tokens[0].token}`)
+        .send()
+        .expect(200)
+
+    expect(response.body.length).toBe(1)
+})
+
 //Read user's applications
 
 test('Should get a users applications', async () => {
@@ -118,7 +130,7 @@ test('Should get a users applications', async () => {
         .send()
         .expect(200)
     
-    expect(response.body.length).toBe(2)
+    expect(response.body.length).toBe(3)
 })
 
 test('Should not get applications for unauthenticated user', async () => {
@@ -126,6 +138,18 @@ test('Should not get applications for unauthenticated user', async () => {
         .get(`/api/market/services/applications`)
         .send()
         .expect(401)
+})
+
+//Read a users fulfilled history
+
+test('Should get a users fulfilled history', async () => {
+    const response = await request(app)
+        .get(`/api/market/services/history`)
+        .set('Authorization', `Bearer ${userTwo.tokens[0].token}`)
+        .send()
+        .expect(200)
+
+    expect(response.body.length).toBe(1)
 })
 
 //Delete transaction

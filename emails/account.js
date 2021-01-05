@@ -71,15 +71,15 @@ const sendApplicationEmail = (email, name, applicant) => {
     sgMail.send({
         to: email,
         from: process.env.SENDGRID_SENDER_EMAIL,
-        subject: 'Someone applied for your service!',
+        subject: 'Someone applied to your service!',
         html: `
-        <div>Hi ${name},&nbsp;</div>
-        <div>&nbsp;</div>
-        <div>We&#39;re happy to inform you the ${applicant} applied to fulfill your service.</div>
-        <div>Please check the application for more information!</div>
-        <div>&nbsp;</div>
-        <div>Best regards,</div>
-        <div>AUB Marketplace Team</div>
+        <div style="font-family: inherit; text-align: inherit">Hi ${name},</div>
+        <div style="font-family: inherit; text-align: inherit"><br></div>
+        <div style="font-family: inherit; text-align: inherit">we are happy to inform you that ${applicant} applied to fulfill your service!</div>
+        <div style="font-family: inherit; text-align: inherit">Please check the application for more information.</div>
+        <div style="font-family: inherit; text-align: inherit"><br></div>
+        <div style="font-family: inherit; text-align: inherit">Best regards,</div>
+        <div style="font-family: inherit; text-align: inherit">AUB Marketplace Team</div>
         `
     }).catch((e)=>{
         console.log(e)
